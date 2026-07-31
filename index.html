@@ -38,11 +38,11 @@
 
         .clock-container {
             position: relative;
-            /* تم إصلاح الأبعاد لضمان الشكل الدائري في جميع المتصفحات */
             width: 85vw; 
             height: 85vw;
             max-width: 350px;
             max-height: 350px;
+            flex-shrink: 0; /* تمنع هذه الخاصية تشوه الساعة أو انكماشها */
             background-image: radial-gradient(#f4e8d3 40%, #e2cd9f 100%);
             border-radius: 50%;
             border: 14px solid var(--gold); 
@@ -55,7 +55,6 @@
             align-items: center;
         }
 
-        /* تعديل خاص بالشاشات العريضة (وضع التدوير) للحفاظ على الساعة دائرية */
         @media (orientation: landscape) {
             .clock-container {
                 width: 85vh;
@@ -204,16 +203,17 @@
         
         const adlamDigits = ['𞥐', '𞥑', '𞥒', '𞥓', '𞥔', '𞥕', '𞥖', '𞥗', '𞥘', '𞥙'];
         function toAdlamNumber(num) {
-            return num.toString().split('').map(char => {
+            return num.toString().split('').map(function(char) {
                 const digit = parseInt(char);
                 return isNaN(digit) ? char : adlamDigits[digit];
             }).join('');
         }
 
         function toAdlamUpperCase(text) {
-            return [...text].map(char => {
+            return [...text].map(function(char) {
                 const code = char.codePointAt(0);
-                if (code >= 0x1E922 && code <= 0x1E943) {
+                // تمت إزالة كل علامات المقارنة الخطيرة لتجنب كسر الكود
+                if (code >= 0x1E922 && !(code >= 0x1E944)) {
                     return String.fromCodePoint(code - 0x22);
                 }
                 return char;
@@ -241,7 +241,7 @@
         const dateTextEl = document.getElementById('date-text');
         const digitalClockEl = document.getElementById('digital-clock');
 
-        customNumbers.forEach((num, index) => {
+        customNumbers.forEach(function(num, index) {
             const numDiv = document.createElement('div');
             numDiv.className = 'number';
             const angle = index * 30;
@@ -284,32 +284,17 @@
             const minutes = now.getMinutes();
             const seconds = now.getSeconds();
 
-            // تم حل مشكلة ظهور الأكواد عن طريق الاستغناء عن علامة الأصغر من "<"
-            const formatDigits = (n) => (n.toString().length === 1 ? '𞥐' + toAdlamNumber(n) : toAdlamNumber(n));
+            // تم التعديل لمنع اي خطأ برمجي مستقبلا
+            const formatDigits = function(n) {
+                return (n.toString().length === 1 ? '𞥐' + toAdlamNumber(n) : toAdlamNumber(n));
+            };
+            
             const digitalTimeStr = `${formatDigits(hours)} : ${formatDigits(minutes)} : ${formatDigits(seconds)}`;
             digitalClockEl.innerText = digitalTimeStr;
 
             const millis = now.getMilliseconds();
             const secondsDegrees = ((seconds + (millis / 1000)) / 60) * 360;
             const minutesDegrees = ((minutes + (seconds / 60)) / 60) * 360;
-            const hoursDegrees = ((hours % 12 + (minutes / 60)) / 12) * 360;
-
-            secondHand.style.transform = `translateX(-50%) rotate(${secondsDegrees}deg)`;
-            minuteHand.style.transform = `translateX(-50%) rotate(${minutesDegrees}deg)`;
-            hourHand.style.transform = `translateX(-50%) rotate(${hoursDegrees}deg)`;
-
-            requestAnimationFrame(updateClock);
-        }
-
-        updateClock();
-    </script>
-</body>
-</html>
-ateClock();
-    </script>
-</body>
-</html>
- (seconds / 60)) / 60) * 360;
             const hoursDegrees = ((hours % 12 + (minutes / 60)) / 12) * 360;
 
             secondHand.style.transform = `translateX(-50%) rotate(${secondsDegrees}deg)`;
