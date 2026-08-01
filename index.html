@@ -14,7 +14,7 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="transparent">
     
-    <title>ساعة أثرية تملأ الشاشة</title>
+    <title>ساعة أثرية مع هامش</title>
     
     <style>
         :root {
@@ -23,7 +23,7 @@
             --dark-green: #153222;
             --blue-green: #008B8B;
             
-            /* ⚙️ إذا كانت الساعة لا تزال صغيرة بسبب التطبيق، قم بزيادة هذا الرقم إلى 1.2 أو 1.5 وسيتم التكبير الإجباري */
+            /* ⚙️ معامل تكبير إضافي يدوي (اتركه 1 الا في حال الضرورة) */
             --scale: 1; 
         }
 
@@ -208,34 +208,28 @@
     </div>
 
     <script>
-        // --- دالة التكبير العنيفة لملء الشاشة بالكامل ---
         function autoResizeClock() {
             const wrapper = document.getElementById('wrapper');
             
-            // استخراج الأبعاد الحقيقية للمربع المتاح بأكثر من طريقة لضمان دقة التطبيق
             const width = document.documentElement.clientWidth || window.innerWidth || document.body.clientWidth;
             const height = document.documentElement.clientHeight || window.innerHeight || document.body.clientHeight;
             
-            // اختيار الجانب الأصغر لضمان بقاء الساعة دائرية بالكامل وعدم قص أطرافها
             const availableSpace = Math.min(width, height);
             
-            // استخراج مقاس التكبير اليدوي من الـ CSS (في حال أردت التكبير أكثر بنفسك)
             const rootStyles = getComputedStyle(document.documentElement);
             const manualScale = parseFloat(rootStyles.getPropertyValue('--scale')) || 1;
 
-            // حساب نسبة التكبير: نضرب المساحة المتاحة في 1.0 لتمتد إلى أقصى حافة مسموحة، مقسومة على الحجم الأصلي 320
-            const scaleFactor = (availableSpace * 1.0) / 320;
+            // ⚠️ تم التعديل هنا: استخدام 0.90 بدلاً من 1.0 لترك مسافة 10% كحواف حول الساعة
+            const scaleFactor = (availableSpace * 0.90) / 320;
             
-            // تطبيق الحجم النهائي (التلقائي × اليدوي)
             wrapper.style.transform = `scale(${scaleFactor * manualScale})`;
         }
 
-        // تشغيل دالة التكبير فوراً، وعند إعادة التحجيم، وتأخيرها قليلاً للتأكد من أن التطبيق قد قام بتحميل الشاشة بالكامل
         window.addEventListener('resize', autoResizeClock);
         window.addEventListener('load', autoResizeClock);
         autoResizeClock();
         setTimeout(autoResizeClock, 150);
-        setTimeout(autoResizeClock, 600); // محاولة أخيرة للتطبيقات البطيئة
+        setTimeout(autoResizeClock, 600); 
 
         // --- إعدادات الساعة والأشهر ---
         const customNumbers = ['𞥑𞥒', '𞥑', '𞥒', '𞥓', '𞥔', '𞥕', '𞥖', '𞥗', '𞥘', '𞥙', '𞥑𞥐', '𞥑𞥑'];
