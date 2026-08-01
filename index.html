@@ -14,16 +14,18 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="transparent">
     
-    <title>ساعة أثرية مع هامش</title>
+    <title>ساعة أثرية داكنة وشفافة</title>
     
     <style>
         :root {
-            --bg-color: #f4e8d3;
-            --gold: #111111; 
-            --dark-green: #153222;
-            --blue-green: #008B8B;
+            /* ألوان الواجهة الداكنة والشفافة لتطابق أدوات سامسونج */
+            --bg-transparent: rgba(30, 30, 30, 0.65);
+            --border-light: rgba(255, 255, 255, 0.15); 
+            --text-white: #ffffff;
+            --accent-red: #ff3b30;
+            --window-bg: rgba(0, 0, 0, 0.4);
             
-            /* ⚙️ معامل تكبير إضافي يدوي (اتركه 1 الا في حال الضرورة) */
+            /* ⚙️ معامل تكبير إضافي يدوي */
             --scale: 1; 
         }
 
@@ -47,36 +49,33 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            /* انتقال ناعم عند تغير الحجم */
             transition: transform 0.2s ease-out;
         }
 
         .clock-container {
             position: relative;
-            /* الحجم الأساسي (الذي سيتم تكبيره برمجياً لملء الفراغ) */
             width: 320px; 
             height: 320px;
             flex-shrink: 0;
-            background-image: radial-gradient(#f4e8d3 40%, #e2cd9f 100%);
+            /* خلفية داكنة شفافة */
+            background-color: var(--bg-transparent);
             border-radius: 50%;
-            border: 14px solid var(--gold); 
-            box-shadow: 
-                0 15px 35px rgba(0, 0, 0, 0.4),
-                inset 0 0 25px rgba(0, 0, 0, 0.4),
-                inset 0 0 10px rgba(0, 0, 0, 0.8);
+            border: 2px solid var(--border-light); 
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
             display: flex;
             justify-content: center;
             align-items: center;
+            backdrop-filter: blur(8px); /* تأثير ضبابي خفيف للخلفية إن كان مدعوماً */
         }
 
+        /* الإطار الداخلي المنقط */
         .clock-container::before {
             content: '';
             position: absolute;
             width: 88%;
             height: 88%;
             border-radius: 50%;
-            border: 2px dashed var(--dark-green);
-            opacity: 0.5;
+            border: 1px dashed rgba(255, 255, 255, 0.3);
         }
 
         .day-window {
@@ -84,15 +83,14 @@
             top: 30%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background-color: #e8d7b3;
-            border: 2px solid var(--gold);
-            border-radius: 4px;
-            padding: 3px 10px;
+            background-color: var(--window-bg);
+            border: 1px solid var(--border-light);
+            border-radius: 6px;
+            padding: 4px 12px;
             font-family: 'ADLaM Display', serif;
             font-size: 11px;
             font-weight: normal;
-            color: var(--blue-green);
-            box-shadow: inset 1px 1px 4px rgba(0, 0, 0, 0.4), 0 1px 2px rgba(255,255,255,0.5);
+            color: var(--text-white);
             z-index: 5;
             text-align: center;
             white-space: nowrap;
@@ -103,14 +101,13 @@
             top: 66%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background-color: #e8d7b3;
-            border: 2px solid var(--gold);
-            border-radius: 4px;
-            padding: 5px 12px;
+            background-color: var(--window-bg);
+            border: 1px solid var(--border-light);
+            border-radius: 6px;
+            padding: 6px 14px;
             font-family: 'ADLaM Display', serif;
             font-weight: normal;
-            color: var(--dark-green);
-            box-shadow: inset 1px 1px 4px rgba(0, 0, 0, 0.4), 0 1px 2px rgba(255,255,255,0.5);
+            color: var(--text-white);
             z-index: 5;
             text-align: center;
             white-space: nowrap;
@@ -123,7 +120,7 @@
 
         .digital-clock {
             font-size: 12px;
-            color: #a93226;
+            color: var(--accent-red);
             margin-top: 3px;
             letter-spacing: 1px;
         }
@@ -135,7 +132,7 @@
             text-align: center;
             font-size: 26px;
             font-weight: bold;
-            color: var(--dark-green);
+            color: var(--text-white);
             padding-top: 15px;
             box-sizing: border-box;
             user-select: none;
@@ -155,23 +152,23 @@
         .hour-hand {
             width: 5px;
             height: 25%;
-            background-color: var(--dark-green);
+            background-color: var(--text-white);
             transform: translateX(-50%);
-            box-shadow: 0 0 5px rgba(0,0,0,0.3);
+            box-shadow: 0 0 5px rgba(0,0,0,0.5);
         }
 
         .minute-hand {
             width: 3.5px;
             height: 35%;
-            background-color: var(--dark-green);
+            background-color: var(--text-white);
             transform: translateX(-50%);
-            box-shadow: 0 0 5px rgba(0,0,0,0.3);
+            box-shadow: 0 0 5px rgba(0,0,0,0.5);
         }
 
         .second-hand {
             width: 2px;
             height: 40%;
-            background-color: #a93226;
+            background-color: var(--accent-red);
             transform: translateX(-50%);
             z-index: 15;
         }
@@ -180,13 +177,13 @@
             position: absolute;
             top: 50%;
             left: 50%;
-            width: 14px;
-            height: 14px;
-            background-color: var(--gold);
+            width: 12px;
+            height: 12px;
+            background-color: var(--accent-red);
             border-radius: 50%;
             transform: translate(-50%, -50%);
             z-index: 20;
-            border: 2px solid var(--dark-green);
+            border: 2px solid #222;
         }
     </style>
 </head>
@@ -219,8 +216,8 @@
             const rootStyles = getComputedStyle(document.documentElement);
             const manualScale = parseFloat(rootStyles.getPropertyValue('--scale')) || 1;
 
-            // ⚠️ تم التعديل هنا: استخدام 0.90 بدلاً من 1.0 لترك مسافة 10% كحواف حول الساعة
-            const scaleFactor = (availableSpace * 0.90) / 320;
+            // ⚠️ تصغير الحجم إلى 0.75 لترك مسافة واسعة تتناسب مع الساعات المجاورة
+            const scaleFactor = (availableSpace * 0.75) / 320;
             
             wrapper.style.transform = `scale(${scaleFactor * manualScale})`;
         }
