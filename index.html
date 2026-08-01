@@ -12,9 +12,9 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="mobile-web-app-capable" content="yes">
-    <meta name="theme-color" content="#0d1b12">
+    <meta name="theme-color" content="transparent">
     
-    <title>ساعة أثرية</title>
+    <title>ساعة أثرية شفافة</title>
     
     <style>
         :root {
@@ -23,17 +23,21 @@
             --dark-green: #153222;
             --blue-green: #008B8B;
             
-            /* تحكم في حجم الساعة بالكامل: اقلل الرقم لتصغيرها (مثلاً 0.7 أو 0.5) أو وزده لتكبيرها */
+            /* ⚙️ تحكم في حجم الساعة بالكامل من هنا فقط 
+               (مثلاً: 0.8 للتصغير، 1 للتوسيط، 1.2 أو 1.5 للتكبير) */
             --scale: 1; 
         }
 
-        body {
-            background: transparent; 
+        /* فرض الشفافية التامة لضمان عدم ظهور أي خلفية بيضاء من المتصفح */
+        html, body {
+            background-color: transparent !important; 
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            margin: 0;
             font-family: serif;
             overflow: hidden; 
             -webkit-tap-highlight-color: transparent; 
@@ -41,6 +45,7 @@
 
         .widget-wrapper {
             transform: scale(var(--scale));
+            transform-origin: center;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -222,7 +227,6 @@
             }).join('');
         }
 
-        // تم تصحيح الحروف والرموز التالفة في أسماء الأشهر بشكل كامل
         const fulaniMonths = [
             '𞤅𞤭𞥅𞤤𞤮', '𞤕𞤮𞤤𞤼𞤫', '𞤃𞤦𞤮𞥅𞤴', '𞤅𞤫𞥅𞤯𞤼𞤮', 
             '𞤁𞤵𞥅𞤶𞤢𞤤', '𞤑𞤮𞤪𞤧𞤫', '𞤃𞤮𞤪𞤧𞤮', '𞤔𞤵𞤳𞤮', 
