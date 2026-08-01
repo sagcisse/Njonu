@@ -1,310 +1,109 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ff" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    
-    <!-- استدعاء خط ADLaM Display المخصص للحروف الأذرية -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=ADLaM+Display&display=swap" rel="stylesheet">
-
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="theme-color" content="#0d1b12">
-    
-    <title>ساعة أثرية</title>
-    
+    <title>𞤅𞤢𞤢𞤼𞤫 𞤆𞤵𞤤𞤢𞤪 - Antique Clock</title>
     <style>
-        :root {
-            --bg-color: #f4e8d3;
-            --gold: #111111; 
-            --dark-green: #153222;
-            --blue-green: #008B8B;
-            
-            /* تحكم في حجم الساعة بالكامل: اقلل الرقم لتصغيرها (مثلاً 0.7 أو 0.5) أو وزده لتكبيرها */
-            --scale: 1; 
+        @font-face {
+            font-family: 'ADLaM Display';
+            src: url('https://cdn.jsdelivr.net/npm/@google/font-adlam@1.0.0/fonts/ADLaMDisplay-Regular.woff2') format('woff2');
         }
-
         body {
-            background: transparent; 
+            background-color: #1a120b;
+            color: #d4af37;
+            font-family: 'ADLaM Display', sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             margin: 0;
-            font-family: serif;
-            overflow: hidden; 
-            -webkit-tap-highlight-color: transparent; 
         }
-
-        .widget-wrapper {
-            transform: scale(var(--scale));
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
         .clock-container {
-            position: relative;
-            width: 320px; 
-            height: 320px;
-            flex-shrink: 0;
-            background-image: radial-gradient(#f4e8d3 40%, #e2cd9f 100%);
+            background: radial-gradient(circle, #3b2716 0%, #1f140a 100%);
+            border: 8px solid #8c6747;
             border-radius: 50%;
-            border: 14px solid var(--gold); 
-            box-shadow: 
-                0 15px 35px rgba(0, 0, 0, 0.4),
-                inset 0 0 25px rgba(0, 0, 0, 0.4),
-                inset 0 0 10px rgba(0, 0, 0, 0.8);
+            width: 480px;
+            height: 480px;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
+            box-shadow: 0 0 30px rgba(0,0,0,0.8), inset 0 0 20px rgba(0,0,0,0.9);
+            position: relative;
         }
-
-        .clock-container::before {
-            content: '';
-            position: absolute;
-            width: 88%;
-            height: 88%;
-            border-radius: 50%;
-            border: 2px dashed var(--dark-green);
-            opacity: 0.5;
+        .time {
+            font-size: 3.2rem;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            margin: 10px 0;
         }
-
-        .day-window {
-            position: absolute;
-            top: 30%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: #e8d7b3;
-            border: 2px solid var(--gold);
-            border-radius: 4px;
-            padding: 3px 10px;
-            font-family: 'ADLaM Display', serif;
-            font-size: 11px;
-            font-weight: normal;
-            color: var(--blue-green);
-            box-shadow: inset 1px 1px 4px rgba(0, 0, 0, 0.4), 0 1px 2px rgba(255,255,255,0.5);
-            z-index: 5;
+        .date {
+            font-size: 1.3rem;
+            margin-top: 15px;
+            color: #c5a059;
             text-align: center;
-            white-space: nowrap;
+            padding: 0 20px;
         }
-
-        .date-window {
+        .title {
             position: absolute;
-            top: 66%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: #e8d7b3;
-            border: 2px solid var(--gold);
-            border-radius: 4px;
-            padding: 5px 12px; /* زيادة الهوامش قليلاً لتناسب الحجم الجديد */
-            font-family: 'ADLaM Display', serif;
-            font-weight: normal;
-            color: var(--dark-green);
-            box-shadow: inset 1px 1px 4px rgba(0, 0, 0, 0.4), 0 1px 2px rgba(255,255,255,0.5);
-            z-index: 5;
-            text-align: center;
-            white-space: nowrap;
-        }
-
-        .date-text {
-            font-size: 12.5px; /* تم تكبير خط التاريخ */
-            line-height: 1.3;
-        }
-
-        .digital-clock {
-            font-size: 12px; /* تم تكبير خط الساعة الرقمية */
-            color: #a93226;
-            margin-top: 3px;
+            top: 50px;
+            font-size: 1.1rem;
+            color: #a67c52;
             letter-spacing: 1px;
-        }
-
-        .number {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            text-align: center;
-            font-size: 26px;
-            font-weight: bold;
-            color: var(--dark-green);
-            padding-top: 15px;
-            box-sizing: border-box;
-            user-select: none;
-        }
-
-        .number span { display: inline-block; }
-
-        .hand {
-            position: absolute;
-            bottom: 50%;
-            left: 50%;
-            transform-origin: bottom;
-            border-radius: 10px;
-            z-index: 10;
-        }
-
-        .hour-hand {
-            width: 5px;
-            height: 25%;
-            background-color: var(--dark-green);
-            transform: translateX(-50%);
-            box-shadow: 0 0 5px rgba(0,0,0,0.3);
-        }
-
-        .minute-hand {
-            width: 3.5px;
-            height: 35%;
-            background-color: var(--dark-green);
-            transform: translateX(-50%);
-            box-shadow: 0 0 5px rgba(0,0,0,0.3);
-        }
-
-        .second-hand {
-            width: 2px;
-            height: 40%;
-            background-color: #a93226;
-            transform: translateX(-50%);
-            z-index: 15;
-        }
-
-        .center-dot {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 14px;
-            height: 14px;
-            background-color: var(--gold);
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 20;
-            border: 2px solid var(--dark-green);
         }
     </style>
 </head>
 <body>
 
-    <div class="widget-wrapper">
-        <div class="clock-container" id="clock">
-            <div class="day-window" id="day-window"></div>
-            
-            <div class="date-window" id="date-window">
-                <div class="date-text" id="date-text"></div>
-                <div class="digital-clock" id="digital-clock"></div>
-            </div>
-            <div class="hand hour-hand" id="hour"></div>
-            <div class="hand minute-hand" id="minute"></div>
-            <div class="hand second-hand" id="second"></div>
-            <div class="center-dot"></div>
-        </div>
+    <div class="clock-container">
+        <div class="title">𞤅𞤢𞤢𞤼𞤫 𞤆𞤵𞤤𞤢𞤪</div>
+        <div class="time" id="clock">--:--:--</div>
+        <div class="date" id="date">--</div>
     </div>
 
     <script>
-        const customNumbers = ['𞥑𞥒', '𞥑', '𞥒', '𞥓', '𞥔', '𞥕', '𞥖', '𞥗', '𞥘', '𞥙', '𞥑𞥐', '𞥑𞥑'];
-        
-        const adlamDigits = ['𞥐', '𞥑', '𞥒', '𞥓', '𞥔', '𞥕', '𞥖', '𞥗', '𞥘', '𞥙'];
-        function toAdlamNumber(num) {
-            return num.toString().split('').map(function(char) {
-                const digit = parseInt(char);
-                return isNaN(digit) ? char : adlamDigits[digit];
-            }).join('');
-        }
+        // أسماء الأيام باللغة الفولانية (Pulaar) بخط أدلام
+        const fulaniDays = [
+            '𞤈𞤫𞤦𞤭𞤪𞥆𞤫', '𞤀𞥄𞤩𞤵𞤲\'𞤣𞤫', '𞤃𞤢𞤱𞤦𞤢𞥄𞤪𞤫', '𞤐𞤶𞤫𞤧𞤤𞤢𞥄𞤪𞤫', 
+            '𞤐𞤢𞥄𞤧𞤢𞥄𞤲\'𞤣𞤫', '𞤃𞤢𞤱𞤲𞤣𞤫', '𞤖𞤮𞤪𞤦𞤭𞤪𞥆𞤫'
+        ];
 
-        function toAdlamUpperCase(text) {
-            return [...text].map(function(char) {
-                const code = char.codePointAt(0);
-                if (code >= 0x1E922 && !(code >= 0x1E944)) {
-                    return String.fromCodePoint(code - 0x22);
-                }
-                return char;
-            }).join('');
-        }
-
+        // أسماء الأشهر باللغة الفولانية (Pulaar) بخط أدلام (تم تصحيح الأخطاء والرموز التالفة)
         const fulaniMonths = [
             '𞤅𞤭𞥅𞤤𞤮', '𞤕𞤮𞤤𞤼𞤫', '𞤃𞤦𞤮𞥅𞤴', '𞤅𞤫𞥅𞤯𞤼𞤮', 
-            '𞤁𞤵𞥅𞤶𞤢𞤤', '𞤑𞤮𞤪𞤧𞤫', '𞤃𞤮𞤪𞤧𞤮', '𞤔𞤵𞤳𞮮', 
-            '𞤅𞤭𞥅𞤤𞤼𞤮', '𞤒𞤢𞤪𞤳𞮮𞤥𞤢𞥅', '𞤔𞮮𞤤𞤢𞤤', '𞤄𞤮𞤱𞤼𞤫'
+            '𞤁𞤵𞥅𞤶𞤢𞤤', '𞤑𞤮𞤪𞤧𞤫', '𞤃𞤮𞤪𞤧𞤮', '𞤔𞤵𞤳𞤮', 
+            '𞤅𞤭𞥅𞤤𞤼𞤮', '𞤒𞤢𞤪𞤳𞤮𞤥𞤢𞥅', '𞤔𞤮𞤤𞤢𞤤', '𞤄𞤮𞤱𞤼𞤫'
         ];
 
-        const fulaniDays = [
-            '𞤀𞤤𞤢𞤤',     
-            '𞤀𞤤𞤼𞤭𞤲𞤫',   
-            '𞤚𞤢𞤤𞤢𞥄𞤼𞤢',   
-            '𞤀𞤤𞤢𞤪𞤦𞤢',   
-            '𞤀𞤤𞤳𞤢𞤥𞤭𞤧𞤢', 
-            '𞤀𞤤𞤶𞤵𞤥𞤢',   
-            '𞤀𞤧𞤫𞤱𞤫'    
-        ];
+        // الأرقام بنظام أدلام (0-9)
+        const fulaniDigits = ['𞥐', '𞥑', '𞥒', '𞥓', '𞥔', '𞥕', '𞥖', '𞥗', '𞥘', '𞥙'];
 
-        const clock = document.getElementById('clock');
-        const dayTextEl = document.getElementById('day-window');
-        const dateTextEl = document.getElementById('date-text');
-        const digitalClockEl = document.getElementById('digital-clock');
+        function toAdlamNumber(num) {
+            return num.toString().split('').map(d => fulaniDigits[parseInt(d)] || d).join('');
+        }
 
-        customNumbers.forEach(function(num, index) {
-            const numDiv = document.createElement('div');
-            numDiv.className = 'number';
-            const angle = index * 30;
-            numDiv.style.transform = `rotate(${angle}deg)`;
-            const span = document.createElement('span');
-            span.innerText = num;
-            span.style.transform = `rotate(-${angle}deg)`;
-            numDiv.appendChild(span);
-            clock.insertBefore(numDiv, clock.firstChild);
-        });
-
-        const hourHand = document.getElementById('hour');
-        const minuteHand = document.getElementById('minute');
-        const secondHand = document.getElementById('second');
-        
-        let lastDateString = ""; 
+        function padZero(num) {
+            return num < 10 ? fulaniDigits[0] + toAdlamNumber(num) : toAdlamNumber(num);
+        }
 
         function updateClock() {
             const now = new Date();
             
-            const dayNum = now.getDate();
-            const monthIdx = now.getMonth();
-            const yearNum = now.getFullYear();
-            const dayOfWeekIdx = now.getDay(); 
+            const hours = padZero(now.getHours());
+            const minutes = padZero(now.getMinutes());
+            const seconds = padZero(now.getSeconds());
 
-            const adlamDay = toAdlamNumber(dayNum);
-            const monthName = toAdlamUpperCase(fulaniMonths[monthIdx]);
-            const currentDayName = toAdlamUpperCase(fulaniDays[dayOfWeekIdx]);
-            const adlamYear = toAdlamNumber(yearNum);
+            document.getElementById('clock').innerText = `${hours}:${minutes}:${seconds}`;
 
-            const currentDateString = `${adlamDay} ${monthName} ${adlamYear}`;
-            
-            if (currentDateString !== lastDateString) {
-                dateTextEl.innerText = currentDateString;
-                dayTextEl.innerText = currentDayName;
-                lastDateString = currentDateString;
-            }
+            const dayName = fulaniDays[now.getDay()];
+            const monthName = fulaniMonths[now.getMonth()];
+            const dayNum = toAdlamNumber(now.getDate());
+            const yearNum = toAdlamNumber(now.getFullYear());
 
-            const hours = now.getHours();
-            const minutes = now.getMinutes();
-            const seconds = now.getSeconds();
-
-            const formatDigits = function(n) {
-                return (n < 10 ? '𞥐' + toAdlamNumber(n) : toAdlamNumber(n));
-            };
-            
-            const digitalTimeStr = `${formatDigits(hours)} : ${formatDigits(minutes)} : ${formatDigits(seconds)}`;
-            digitalClockEl.innerText = digitalTimeStr;
-
-            const millis = now.getMilliseconds();
-            const secondsDegrees = ((seconds + (millis / 1000)) / 60) * 360;
-            const minutesDegrees = ((minutes + (seconds / 60)) / 60) * 360;
-            const hoursDegrees = ((hours % 12 + (minutes / 60)) / 12) * 360;
-
-            secondHand.style.transform = `translateX(-50%) rotate(${secondsDegrees}deg)`;
-            minuteHand.style.transform = `translateX(-50%) rotate(${minutesDegrees}deg)`;
-            hourHand.style.transform = `translateX(-50%) rotate(${hoursDegrees}deg)`;
-
-            requestAnimationFrame(updateClock);
+            document.getElementById('date').innerText = `${dayName}، ${dayNum} ${monthName} ${yearNum}`;
         }
 
+        setInterval(updateClock, 1000);
         updateClock();
     </script>
 </body>
