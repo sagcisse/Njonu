@@ -14,7 +14,7 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="transparent">
     
-    <title>ساعة أثرية شفافة</title>
+    <title>ساعة أثرية تملأ الشاشة</title>
     
     <style>
         :root {
@@ -22,19 +22,15 @@
             --gold: #111111; 
             --dark-green: #153222;
             --blue-green: #008B8B;
-            
-            /* ⚙️ تحكم في حجم الساعة بالكامل من هنا فقط 
-               (مثلاً: 0.8 للتصغير، 1 للتوسيط، 1.2 أو 1.5 للتكبير) */
-            --scale: 1; 
         }
 
-        /* فرض الشفافية التامة لضمان عدم ظهور أي خلفية بيضاء من المتصفح */
+        /* فرض الشفافية وجعل الجسم يملأ المساحة بالكامل */
         html, body {
             background-color: transparent !important; 
             margin: 0;
             padding: 0;
-            width: 100%;
-            height: 100%;
+            width: 100vw;
+            height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -44,7 +40,6 @@
         }
 
         .widget-wrapper {
-            transform: scale(var(--scale));
             transform-origin: center;
             display: flex;
             justify-content: center;
@@ -53,6 +48,7 @@
 
         .clock-container {
             position: relative;
+            /* الحجم الأساسي الذي سيتم تكبيره تلقائياً */
             width: 320px; 
             height: 320px;
             flex-shrink: 0;
@@ -191,7 +187,7 @@
 </head>
 <body>
 
-    <div class="widget-wrapper">
+    <div class="widget-wrapper" id="wrapper">
         <div class="clock-container" id="clock">
             <div class="day-window" id="day-window"></div>
             
@@ -207,6 +203,21 @@
     </div>
 
     <script>
+        // --- دالة الملاءمة التلقائية لملء مساحة الـ Widget ---
+        function autoResizeClock() {
+            const wrapper = document.getElementById('wrapper');
+            // حساب المساحة المتاحة في المربع (الطول والعرض) واختيار الأقل بينهما لضمان بقاء الساعة دائرية
+            const availableSpace = Math.min(window.innerWidth, window.innerHeight);
+            // قسمة المساحة المتاحة على الحجم الأساسي للساعة (320) مع ترك 5% هامش حتى لا تقطع الزوايا
+            const scaleFactor = (availableSpace * 0.95) / 320;
+            wrapper.style.transform = `scale(${scaleFactor})`;
+        }
+
+        // تفعيل الملاءمة عند تشغيل الساعة وعند تغيير حجم الـ Widget يدوياً من الشاشة
+        window.addEventListener('resize', autoResizeClock);
+        autoResizeClock(); // تشغيل فوري
+
+        // --- إعدادات الساعة والأشهر ---
         const customNumbers = ['𞥑𞥒', '𞥑', '𞥒', '𞥓', '𞥔', '𞥕', '𞥖', '𞥗', '𞥘', '𞥙', '𞥑𞥐', '𞥑𞥑'];
         
         const adlamDigits = ['𞥐', '𞥑', '𞥒', '𞥓', '𞥔', '𞥕', '𞥖', '𞥗', '𞥘', '𞥙'];
