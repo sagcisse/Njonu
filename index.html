@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     
-    <!-- استدعاء خط ADLaM Display المخصص للحروف الأذرية -->
+    <!-- استدعاء خط ADLaM Display -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=ADLaM+Display&display=swap" rel="stylesheet">
@@ -22,15 +22,18 @@
             --gold: #111111; 
             --dark-green: #153222;
             --blue-green: #008B8B;
+            
+            /* ⚙️ إذا كانت الساعة لا تزال صغيرة بسبب التطبيق، قم بزيادة هذا الرقم إلى 1.2 أو 1.5 وسيتم التكبير الإجباري */
+            --scale: 1; 
         }
 
-        /* فرض الشفافية وجعل الجسم يملأ المساحة بالكامل */
+        /* فرض الشفافية وجعل الجسم يملأ المساحة بالكامل بدون حواف */
         html, body {
             background-color: transparent !important; 
             margin: 0;
             padding: 0;
-            width: 100vw;
-            height: 100vh;
+            width: 100%;
+            height: 100%;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -44,11 +47,13 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            /* انتقال ناعم عند تغير الحجم */
+            transition: transform 0.2s ease-out;
         }
 
         .clock-container {
             position: relative;
-            /* الحجم الأساسي الذي سيتم تكبيره تلقائياً */
+            /* الحجم الأساسي (الذي سيتم تكبيره برمجياً لملء الفراغ) */
             width: 320px; 
             height: 320px;
             flex-shrink: 0;
@@ -203,19 +208,34 @@
     </div>
 
     <script>
-        // --- دالة الملاءمة التلقائية لملء مساحة الـ Widget ---
+        // --- دالة التكبير العنيفة لملء الشاشة بالكامل ---
         function autoResizeClock() {
             const wrapper = document.getElementById('wrapper');
-            // حساب المساحة المتاحة في المربع (الطول والعرض) واختيار الأقل بينهما لضمان بقاء الساعة دائرية
-            const availableSpace = Math.min(window.innerWidth, window.innerHeight);
-            // قسمة المساحة المتاحة على الحجم الأساسي للساعة (320) مع ترك 5% هامش حتى لا تقطع الزوايا
-            const scaleFactor = (availableSpace * 0.95) / 320;
-            wrapper.style.transform = `scale(${scaleFactor})`;
+            
+            // استخراج الأبعاد الحقيقية للمربع المتاح بأكثر من طريقة لضمان دقة التطبيق
+            const width = document.documentElement.clientWidth || window.innerWidth || document.body.clientWidth;
+            const height = document.documentElement.clientHeight || window.innerHeight || document.body.clientHeight;
+            
+            // اختيار الجانب الأصغر لضمان بقاء الساعة دائرية بالكامل وعدم قص أطرافها
+            const availableSpace = Math.min(width, height);
+            
+            // استخراج مقاس التكبير اليدوي من الـ CSS (في حال أردت التكبير أكثر بنفسك)
+            const rootStyles = getComputedStyle(document.documentElement);
+            const manualScale = parseFloat(rootStyles.getPropertyValue('--scale')) || 1;
+
+            // حساب نسبة التكبير: نضرب المساحة المتاحة في 1.0 لتمتد إلى أقصى حافة مسموحة، مقسومة على الحجم الأصلي 320
+            const scaleFactor = (availableSpace * 1.0) / 320;
+            
+            // تطبيق الحجم النهائي (التلقائي × اليدوي)
+            wrapper.style.transform = `scale(${scaleFactor * manualScale})`;
         }
 
-        // تفعيل الملاءمة عند تشغيل الساعة وعند تغيير حجم الـ Widget يدوياً من الشاشة
+        // تشغيل دالة التكبير فوراً، وعند إعادة التحجيم، وتأخيرها قليلاً للتأكد من أن التطبيق قد قام بتحميل الشاشة بالكامل
         window.addEventListener('resize', autoResizeClock);
-        autoResizeClock(); // تشغيل فوري
+        window.addEventListener('load', autoResizeClock);
+        autoResizeClock();
+        setTimeout(autoResizeClock, 150);
+        setTimeout(autoResizeClock, 600); // محاولة أخيرة للتطبيقات البطيئة
 
         // --- إعدادات الساعة والأشهر ---
         const customNumbers = ['𞥑𞥒', '𞥑', '𞥒', '𞥓', '𞥔', '𞥕', '𞥖', '𞥗', '𞥘', '𞥙', '𞥑𞥐', '𞥑𞥑'];
