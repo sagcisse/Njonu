@@ -4,32 +4,67 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     
-    <!-- استدعاء خط ADLaM Display -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=ADLaM+Display&display=swap" rel="stylesheet">
 
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="theme-color" content="transparent">
-    
-    <title>ساعة أثرية داكنة وشفافة</title>
-    
     <style>
+        /* --- الألوان والثيمات المختلفة --- */
         :root {
-            /* ألوان الواجهة الداكنة والشفافة لتطابق أدوات سامسونج */
-            --bg-transparent: rgba(30, 30, 30, 0.65);
-            --border-light: rgba(255, 255, 255, 0.15); 
+            /* الثيم الافتراضي: داكن شفاف */
+            --bg-transparent: rgba(30, 30, 30, 0.70);
+            --border-light: rgba(255, 255, 255, 0.2); 
             --text-white: #ffffff;
-            --accent-red: #ff3b30;
-            --window-bg: rgba(0, 0, 0, 0.4);
-            
-            /* ⚙️ معامل تكبير إضافي يدوي */
+            --accent-color: #ff3b30;
+            --window-bg: rgba(0, 0, 0, 0.45);
             --scale: 1; 
         }
 
-        /* فرض الشفافية وجعل الجسم يملأ المساحة بالكامل بدون حواف */
+        /* ثيم 1: الذهبي الأثري (Gold Edition) */
+        body.theme-gold {
+            --bg-transparent: rgba(40, 32, 15, 0.85);
+            --border-light: rgba(230, 180, 80, 0.5);
+            --text-white: #fbe3b5;
+            --accent-color: #ffd700;
+            --window-bg: rgba(20, 15, 5, 0.6);
+        }
+
+        /* ثيم 2: الزمرد الملكي (Emerald) */
+        body.theme-emerald {
+            --bg-transparent: rgba(10, 35, 25, 0.85);
+            --border-light: rgba(80, 220, 150, 0.4);
+            --text-white: #e0f8ed;
+            --accent-color: #2ecc71;
+            --window-bg: rgba(5, 20, 15, 0.6);
+        }
+
+        /* ثيم 3: الأزرق الملكي (Royal Blue) */
+        body.theme-blue {
+            --bg-transparent: rgba(15, 25, 45, 0.85);
+            --border-light: rgba(100, 160, 255, 0.4);
+            --text-white: #e3efff;
+            --accent-color: #007aff;
+            --window-bg: rgba(5, 10, 25, 0.6);
+        }
+
+        /* ثيم 4: العنابي الياقوتي (Crimson Red) */
+        body.theme-crimson {
+            --bg-transparent: rgba(45, 15, 20, 0.85);
+            --border-light: rgba(255, 100, 120, 0.4);
+            --text-white: #ffe8eb;
+            --accent-color: #ff2d55;
+            --window-bg: rgba(25, 5, 10, 0.6);
+        }
+
+        /* ثيم 5: الأرجواني الساطع (Neon Purple) */
+        body.theme-purple {
+            --bg-transparent: rgba(30, 15, 45, 0.85);
+            --border-light: rgba(180, 100, 255, 0.4);
+            --text-white: #f3e5ff;
+            --accent-color: #af52de;
+            --window-bg: rgba(15, 5, 25, 0.6);
+        }
+
         html, body {
             background-color: transparent !important; 
             margin: 0;
@@ -39,9 +74,10 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            font-family: serif;
+            font-family: 'ADLaM Display', serif;
             overflow: hidden; 
             -webkit-tap-highlight-color: transparent; 
+            transition: all 0.4s ease;
         }
 
         .widget-wrapper {
@@ -49,7 +85,6 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            transition: transform 0.2s ease-out;
         }
 
         .clock-container {
@@ -57,25 +92,24 @@
             width: 320px; 
             height: 320px;
             flex-shrink: 0;
-            /* خلفية داكنة شفافة */
             background-color: var(--bg-transparent);
             border-radius: 50%;
             border: 2px solid var(--border-light); 
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
             display: flex;
             justify-content: center;
             align-items: center;
-            backdrop-filter: blur(8px); /* تأثير ضبابي خفيف للخلفية إن كان مدعوماً */
+            backdrop-filter: blur(10px);
+            transition: all 0.4s ease;
         }
 
-        /* الإطار الداخلي المنقط */
         .clock-container::before {
             content: '';
             position: absolute;
             width: 88%;
             height: 88%;
             border-radius: 50%;
-            border: 1px dashed rgba(255, 255, 255, 0.3);
+            border: 1px dashed var(--border-light);
         }
 
         .day-window {
@@ -87,9 +121,7 @@
             border: 1px solid var(--border-light);
             border-radius: 6px;
             padding: 4px 12px;
-            font-family: 'ADLaM Display', serif;
             font-size: 11px;
-            font-weight: normal;
             color: var(--text-white);
             z-index: 5;
             text-align: center;
@@ -105,8 +137,6 @@
             border: 1px solid var(--border-light);
             border-radius: 6px;
             padding: 6px 14px;
-            font-family: 'ADLaM Display', serif;
-            font-weight: normal;
             color: var(--text-white);
             z-index: 5;
             text-align: center;
@@ -120,7 +150,7 @@
 
         .digital-clock {
             font-size: 12px;
-            color: var(--accent-red);
+            color: var(--accent-color);
             margin-top: 3px;
             letter-spacing: 1px;
         }
@@ -168,7 +198,7 @@
         .second-hand {
             width: 2px;
             height: 40%;
-            background-color: var(--accent-red);
+            background-color: var(--accent-color);
             transform: translateX(-50%);
             z-index: 15;
         }
@@ -179,18 +209,31 @@
             left: 50%;
             width: 12px;
             height: 12px;
-            background-color: var(--accent-red);
+            background-color: var(--accent-color);
             border-radius: 50%;
             transform: translate(-50%, -50%);
             z-index: 20;
             border: 2px solid #222;
+        }
+
+        /* زر التغيير السريع للألوان عند النقر على الساعة */
+        .color-toggle-btn {
+            position: absolute;
+            bottom: 12px;
+            font-size: 10px;
+            color: var(--border-light);
+            background: rgba(0,0,0,0.3);
+            padding: 3px 8px;
+            border-radius: 10px;
+            cursor: pointer;
+            z-index: 30;
         }
     </style>
 </head>
 <body>
 
     <div class="widget-wrapper" id="wrapper">
-        <div class="clock-container" id="clock">
+        <div class="clock-container" id="clock" onclick="nextTheme()">
             <div class="day-window" id="day-window"></div>
             
             <div class="date-window" id="date-window">
@@ -201,46 +244,49 @@
             <div class="hand minute-hand" id="minute"></div>
             <div class="hand second-hand" id="second"></div>
             <div class="center-dot"></div>
+            <div class="color-toggle-btn">اضغط لتغيير اللون</div>
         </div>
     </div>
 
     <script>
+        // دالة تغيير الثيمات والألوان
+        const themes = ['', 'theme-gold', 'theme-emerald', 'theme-blue', 'theme-crimson', 'theme-purple'];
+        let currentThemeIndex = 0;
+
+        function nextTheme() {
+            currentThemeIndex = (currentThemeIndex + 1) % themes.length;
+            setTheme(themes[currentThemeIndex]);
+        }
+
+        function setTheme(themeName) {
+            document.body.className = themeName;
+        }
+
         function autoResizeClock() {
             const wrapper = document.getElementById('wrapper');
-            
             const width = document.documentElement.clientWidth || window.innerWidth || document.body.clientWidth;
             const height = document.documentElement.clientHeight || window.innerHeight || document.body.clientHeight;
-            
             const availableSpace = Math.min(width, height);
-            
-            const rootStyles = getComputedStyle(document.documentElement);
-            const manualScale = parseFloat(rootStyles.getPropertyValue('--scale')) || 1;
-
-            // ⚠️ تصغير الحجم إلى 0.75 لترك مسافة واسعة تتناسب مع الساعات المجاورة
-            const scaleFactor = (availableSpace * 0.75) / 320;
-            
-            wrapper.style.transform = `scale(${scaleFactor * manualScale})`;
+            const scaleFactor = (availableSpace * 0.85) / 320;
+            wrapper.style.transform = `scale(${scaleFactor})`;
         }
 
         window.addEventListener('resize', autoResizeClock);
         window.addEventListener('load', autoResizeClock);
         autoResizeClock();
-        setTimeout(autoResizeClock, 150);
-        setTimeout(autoResizeClock, 600); 
 
-        // --- إعدادات الساعة والأشهر ---
         const customNumbers = ['𞥑𞥒', '𞥑', '𞥒', '𞥓', '𞥔', '𞥕', '𞥖', '𞥗', '𞥘', '𞥙', '𞥑𞥐', '𞥑𞥑'];
-        
         const adlamDigits = ['𞥐', '𞥑', '𞥒', '𞥓', '𞥔', '𞥕', '𞥖', '𞥗', '𞥘', '𞥙'];
+        
         function toAdlamNumber(num) {
-            return num.toString().split('').map(function(char) {
+            return num.toString().split('').map(char => {
                 const digit = parseInt(char);
                 return isNaN(digit) ? char : adlamDigits[digit];
             }).join('');
         }
 
         function toAdlamUpperCase(text) {
-            return [...text].map(function(char) {
+            return [...text].map(char => {
                 const code = char.codePointAt(0);
                 if (code >= 0x1E922 && !(code >= 0x1E944)) {
                     return String.fromCodePoint(code - 0x22);
@@ -256,13 +302,8 @@
         ];
 
         const fulaniDays = [
-            '𞤀𞤤𞤢𞤤',     
-            '𞤀𞤤𞤼𞤭𞤲𞤫',   
-            '𞤚𞤢𞤤𞤢𞥄𞤼𞤢',   
-            '𞤀𞤤𞤢𞤪𞤦𞤢',   
-            '𞤀𞤤𞤳𞤢𞤥𞤭𞤧𞤢', 
-            '𞤀𞤤𞤶𞤵𞤥𞤢',   
-            '𞤀𞤧𞤫𞤱𞤫'    
+            '𞤀𞤤𞤢𞤤', '𞤀𞤤𞤼𞤭𞤲𞤫', '𞤚𞤢𞤤𞤢𞥄𞤼𞤢', '𞤀𞤤𞤢𞤪𞤦𞤢', 
+            '𞤀𞤤𞤳𞤢𞤥𞤭𞤧𞤢', '𞤀𞤤𞤶𞤵𞤥𞤢', '𞤀𞤧𞤫𞤱𞤫'
         ];
 
         const clock = document.getElementById('clock');
@@ -270,7 +311,7 @@
         const dateTextEl = document.getElementById('date-text');
         const digitalClockEl = document.getElementById('digital-clock');
 
-        customNumbers.forEach(function(num, index) {
+        customNumbers.forEach((num, index) => {
             const numDiv = document.createElement('div');
             numDiv.className = 'number';
             const angle = index * 30;
@@ -285,12 +326,10 @@
         const hourHand = document.getElementById('hour');
         const minuteHand = document.getElementById('minute');
         const secondHand = document.getElementById('second');
-        
         let lastDateString = ""; 
 
         function updateClock() {
             const now = new Date();
-            
             const dayNum = now.getDate();
             const monthIdx = now.getMonth();
             const yearNum = now.getFullYear();
@@ -313,12 +352,8 @@
             const minutes = now.getMinutes();
             const seconds = now.getSeconds();
 
-            const formatDigits = function(n) {
-                return (n < 10 ? '𞥐' + toAdlamNumber(n) : toAdlamNumber(n));
-            };
-            
-            const digitalTimeStr = `${formatDigits(hours)} : ${formatDigits(minutes)} : ${formatDigits(seconds)}`;
-            digitalClockEl.innerText = digitalTimeStr;
+            const formatDigits = (n) => (n < 10 ? '𞥐' + toAdlamNumber(n) : toAdlamNumber(n));
+            digitalClockEl.innerText = `${formatDigits(hours)} : ${formatDigits(minutes)} : ${formatDigits(seconds)}`;
 
             const millis = now.getMilliseconds();
             const secondsDegrees = ((seconds + (millis / 1000)) / 60) * 360;
